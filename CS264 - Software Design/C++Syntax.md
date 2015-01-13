@@ -466,3 +466,96 @@ Three Uses:
 - similar to final (from C)
 - Singleton
 - only variable to containing class. (from C)
+
+# C++11
+## Auto Type
+```c++
+auto i = 5; // i will have type int (determined from type of 5)
+
+auto d = 4.5; // d will have type double
+
+auto c = ‘t’; // c will have type char
+
+auto s = “Hello”; // s will have type “const char *” i.e. string literal
+
+string s1 = “Hello”;
+
+auto s2 = s1; //s2 will have type string from type of s1
+```
+
+### Auto Iterator
+```c++
+std::vector<my_square_class> squares;
+
+for (auto i = squares.begin(); i < squares.end(); ++i) {
+  i.move(2.0,3.0);
+  i.draw();
+}
+```
+
+### Range based for loops using `auto`
+Similar to the for each loop in Java
+- Use of the auto reference `auto&` makes it more efficient
+
+```c++
+std::vector<my_square_class> squares;
+
+for (auto& i : squares) {
+  i.move(2.0, 3.0);
+  i.draw();
+}
+```
+
+## λ Expressions
+The functional influence is real
+
+std::sort algorithm operates over c using compare_cust function object to
+compare elements
+
+### λ Expression Syntax
+[] (`Arguments`) {return `function body`;}
+
+### Without λ Expression
+```c++
+struct customer{
+  string name;
+  int age;
+};
+
+class compare_cust {
+public:
+  bool operator() (const customer& c1, const customer& c2) {
+    return c1.age > c2.age;
+  };
+};
+
+int main() {
+  vector<customer> c {{"Jean", 34}, {"John", 22}, {"Pat",50}};
+
+  sort(c.begin(), c.end(), compare_cust());
+}
+```
+
+### With λ Expression
+```c++
+struct customer{
+  string name;
+  int age;
+};
+
+
+int main() {
+  vector<customer> c {{"Jean", 34}, {"John", 22}, {"Pat",50}};
+
+  sort(c.begin(), c.end(), [] (customer c1, customer c2) {
+    return c1.age > c2.age;
+  });
+}
+```
+
+## Smart Pointers `shared_ptr`
+Smart Pointers automatically dereference themselves when they go out of scope
+```c++
+// p automatically calls destructor when it goes out of scope
+shared_ptr<Point> p(new Point (1, 2));
+```
