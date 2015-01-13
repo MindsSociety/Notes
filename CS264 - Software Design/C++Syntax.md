@@ -251,6 +251,9 @@ class A {
 ## Constructors and Destructors
 ```c++
 class Point {
+  int x_;
+  int y_;
+
   public:
     // Default Constructor
     Point();
@@ -260,6 +263,18 @@ class Point {
     //Destructor
     ~Point();
 };
+
+Point::Point(int x, int y) {
+  this -> x_ = x;
+  this -> y_ = y;
+}
+```
+
+## Initialiser Lists
+```c++
+Point::Point(int x, int y) : x_(x), y_(y) {
+
+}
 ```
 
 ## Object Inheritance
@@ -315,6 +330,7 @@ class Point {
     Point operator + (const Point &);
     Point operator - (const Point &);
     Point operator * (const Point &);
+    Point operator = (const Point &);
 
     friend ostream & operator << (ostream &, const Point &);
 };
@@ -339,13 +355,25 @@ Point Point::operator+(const Point &p) {
 }
 ```
 
+### Overriding the Assignment operator
+- Set all of the member variable to the incoming object
+- return `* this`
+
+```c++
+Point Point::operator = (const Point &p) {
+  x = p.getX();
+  y = p.getY();
+  return * this;
+}
+```
+
 ### Overriding the Stream operator `<<`
 Overloading the `<<` operator allows us to use our object with output Streams.
 To override the stream operator for an object, we need to make the ostream a
 `friend` class of ours. See the class definition above.
 
 ```c++
-ostream& operator<<(ostream& os, const Point &p) {
+ostream& Point::operator<<(ostream& os, const Point &p) {
   return os << "Point: " << getx() << ", " << getY();
 }
 ```
@@ -377,11 +405,28 @@ int main() {
 }
 ```
 
+### Deleting Arrays
+```c++
+int main() {
+  int * array = new int[10];
+  delete [] array;
+}
+```
+
+### Deleting Objects
+```c++
+int main() {
+  Square square = new Square();
+  square -> setHeight(10);
+  delete square;
+}
+```
+
 ## Templates
 ### Function Templates
 ```c++
 template <typename T>
-T Max(T const a, T const b) {
+T Max(const T &a, const T &b) {
   return a >= b ? a : b;
 }
 
